@@ -85,4 +85,6 @@ extern "C" void __cxa_pure_virtual() {;}
 #define portInputRegister(P)
 #define portModeRegister(P)
 #include <..\NanoDAC\NanoDac.ino>
+#include <..\NanoDAC\Adafruit_MCP4725.cpp>
+#include <..\NanoDAC\Adafruit_MCP4725.h>
 #endif
