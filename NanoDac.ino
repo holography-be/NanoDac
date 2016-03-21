@@ -34,7 +34,7 @@ PINC, PIN 4,5,6,7 -> high 4 bits (PORTD)
 Adafruit_MCP4725 dac;
 
 // Set this value to 9, 8, 7, 6 or 5 to adjust the resolution
-#define DAC_RESOLUTION    (8)
+//#define DAC_RESOLUTION    (8)
 
 
 #define pinInterrupt	2
@@ -50,7 +50,7 @@ uint8_t volatile laserLevel = 255;
 #define signal digitalRead(2)
 
 // pour éviter une conversion coûteuse 
-const PROGMEM uint16_t Volt[256] =
+const uint16_t Volt[256] =
 {
 	0, 16, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240, 256, 273, 289, 305, 321, 337, 353,
 	369, 385, 401, 417, 433, 449, 465, 481, 497, 513, 529, 546, 562, 578, 594, 610, 626, 642, 658,
@@ -66,7 +66,8 @@ const PROGMEM uint16_t Volt[256] =
 	3067, 3083, 3099, 3115, 3131, 3147, 3163, 3179, 3195, 3211, 3227, 3243, 3259, 3276, 3292,
 	3308, 3324, 3340, 3356, 3372, 3388, 3404, 3420, 3436, 3452, 3468, 3484, 3500, 3516, 3532, 3549, 3565,
 	3581, 3597, 3613, 3629, 3645, 3661, 3677, 3693, 3709, 3725, 3741, 3757, 3773, 3789, 3805,
-	3822, 3838, 3854, 3870, 3886, 3902, 3918, 3934, 3950, 3966, 3982, 3998, 4014, 4030, 4046, 4062, 4078, 4095};
+	3822, 3838, 3854, 3870, 3886, 3902, 3918, 3934, 3950, 3966, 3982, 3998, 4014, 4030, 4046, 4062, 4078, 4095
+};
 
 
 void setup()
@@ -75,15 +76,13 @@ void setup()
 	DDRC &= (B11110000);	// set pin A0,A1,A2,A3 as input
 	DDRB |= B00000001;	// set pin 8 as output
 	pinMode(2, INPUT);
-	Serial.begin(115200);
-	Serial.println("OK");
 	// on signale démarrage
-	for (uint8_t i = 0; i < 5; i++) {
-		pinMode(9, OUTPUT);
-		digitalWrite(9, HIGH);
-		delay(500);
-		digitalWrite(9, LOW);
-		delay(500);
+	for (uint8_t i = 0; i < 3; i++) {
+		pinMode(13, OUTPUT);
+		digitalWrite(13, HIGH);
+		delay(50);
+		digitalWrite(13, LOW);
+		delay(50);
 	}
 	Busy;	// on est occupé
 	Ready;
@@ -106,8 +105,8 @@ void loop()
 	Busy;
 	laserLevel = (PINC & B00001111) | (PIND & B11110000);
 	// sent level to DAC (I2C)
-	dac.setVoltage(pgm_read_word(&(Volt[laserLevel])), false);
-	Serial.println(laserLevel);
+	//////////dac.setVoltage(pgm_read_word(&(Volt[laserLevel])), false);
+	dac.setVoltage(Volt[laserLevel], false);
 	Ready; // on a fini, prêt pour prochaine demande
 }
 
